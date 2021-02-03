@@ -1,0 +1,34 @@
+#!/bin/bash
+
+echo "INGRESANDO AL DIRECTORIO"
+cd /var/www/app || exit
+
+echo "OTORGANDO PERMISOS A STORAGE Y BOOTSTRAP-CACHE"
+chmod -Rf 777 storage
+chmod -Rf 777 bootstrap/cache
+
+#echo "INSTALANDO COMPOSER"
+#composer install
+#composer dump-autoload
+
+echo "ELIMINANDO ARCHIVOS BASURA"
+php artisan view:clear
+php artisan route:clear
+php artisan cache:clear
+
+echo "CREANDO DIRECTORIOS SIMBOLICOS"
+if [ -d /var/www/html/app ];
+then
+echo "YA EXISTE ENLACE SIMBÓLICO"
+else
+ln -s /var/www/app/public /var/www/html/app
+fi
+
+
+echo '<?php header("location: /app");' > /var/www/html/index.php
+
+
+httpd -D FOREGROUND &
+_pid_apache=$!
+
+wait ${_pid_apache}
