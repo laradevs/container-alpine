@@ -17,15 +17,15 @@ php artisan route:clear
 php artisan cache:clear
 
 echo "CREANDO DIRECTORIOS SIMBOLICOS"
-if [ -d /var/www/html/app ];
+if [ -d /var/www/html/appadmindevices ];
 then
 echo "YA EXISTE ENLACE SIMBÓLICO"
 else
-ln -s /var/www/app/public /var/www/html/app
+ln -s /var/www/app/public /var/www/html/appadmindevices
 fi
 
 
-echo '<?php header("location: /app");' > /var/www/html/index.php
+echo '<?php header("location: /appadmindevices");' > /var/www/html/index.php
 
 
 httpd -D FOREGROUND &
